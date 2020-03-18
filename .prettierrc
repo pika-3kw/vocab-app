@@ -1,0 +1,13 @@
+{
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "endOfLine": "crlf",
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "options": {
+        "tabWidth": 4
+      }
+    }
+  ]
+}
