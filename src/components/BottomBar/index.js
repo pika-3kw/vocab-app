@@ -6,7 +6,7 @@ import {
   MenuBook as MenuBookIcon,
   Today as TodayIcon,
   List as ListIcon,
-  PersonOutline as PresonIcon
+  PersonOutline as PersonIcon
 } from '@material-ui/icons';
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import { Link } from 'react-router-dom';
@@ -59,7 +59,7 @@ const BottomBar = () => {
 
       <BottomNavigationAction
         label='User'
-        icon={<PresonIcon />}
+        icon={<PersonIcon />}
         component={MyLink}
         to='/user'
       />
