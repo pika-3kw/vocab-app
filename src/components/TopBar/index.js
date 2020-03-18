@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   AppBar,
@@ -15,6 +15,8 @@ import {
 
 import { makeStyles } from '@material-ui/core/styles';
 
+import MenuDrawer from '../MenuDrawer/index';
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
@@ -30,6 +32,13 @@ const useStyles = makeStyles(theme => ({
 
 const Topbar = () => {
   const classes = useStyles();
+
+  const [isMenuOpen, drawMenu] = useState(false);
+
+  const toggleMenuDrawer = () => {
+    drawMenu(!isMenuOpen);
+  };
+
   return (
     <AppBar position='static'>
       <Toolbar>
@@ -38,12 +47,20 @@ const Topbar = () => {
           className={classes.menuButton}
           color='inherit'
           aria-label='menu'
+          onClick={() => toggleMenuDrawer()}
         >
           <MenuIcon />
         </IconButton>
+
+        <MenuDrawer
+          isMenuOpen={isMenuOpen}
+          toggleMenuDrawer={() => toggleMenuDrawer()}
+        />
+
         <Typography variant='h6' className={classes.title}>
           VocabApp
         </Typography>
+
         <IconButton
           edge='start'
           className={classes.menuButton}

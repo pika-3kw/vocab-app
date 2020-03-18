@@ -13,28 +13,26 @@ import {
 
 const App = () => {
   return (
-    <>
+    <Router>
       <TopBar />
 
-      <Router>
-        <BottomBar />
+      <Switch>
+        <Route exact path='/'>
+          <LearnPage />
+        </Route>
+        <Route path='/today'>
+          <TodayPage />
+        </Route>
+        <Route path='/dictionary'>
+          <DictionaryPage />
+        </Route>
+        <Route path='/User'>
+          <UserPage />
+        </Route>
+      </Switch>
 
-        <Switch>
-          <Route exact path='/'>
-            <LearnPage />
-          </Route>
-          <Route path='/today'>
-            <TodayPage />
-          </Route>
-          <Route path='/dictionary'>
-            <DictionaryPage />
-          </Route>
-          <Route path='/User'>
-            <UserPage />
-          </Route>
-        </Switch>
-      </Router>
-    </>
+      <BottomBar />
+    </Router>
   );
 };
 

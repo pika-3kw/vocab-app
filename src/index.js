@@ -5,22 +5,48 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { teal } from '@material-ui/core/colors';
+import { CssBaseline } from '@material-ui/core';
 
-const theme = createMuiTheme({
+import { createStore } from 'redux';
+import { Provider, useSelector } from 'react-redux';
+
+import rootReducer from './reducers/';
+
+const store = createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+
+const lightTheme = createMuiTheme({
   palette: {
-    primary: {
-      main: '#482880'
-    },
-    secondary: {
-      main: '#4615b2'
-    }
+    type: 'light',
+    primary: teal
   }
 });
 
+const darkTheme = createMuiTheme({
+  palette: {
+    type: 'dark',
+    primary: teal
+  }
+});
+
+const Root = () => {
+  const isDarkTheme = useSelector(state => state.app.isDarkTheme);
+
+  return (
+    <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
+  );
+};
+
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    <App />
-  </ThemeProvider>,
+  <Provider store={store}>
+    <Root />
+  </Provider>,
   document.getElementById('root')
 );
 
