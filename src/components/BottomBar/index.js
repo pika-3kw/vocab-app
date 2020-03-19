@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { styled } from '@material-ui/core/styles';
@@ -17,15 +17,18 @@ const MyLink = styled(Link)({
 
 const useStyles = makeStyles({
   root: {
-    width: '100%',
     bottom: 0,
-    position: 'fixed'
+    position: 'fixed',
+    left: 0,
+    right: 0,
+    width: '100%',
+    boxSizing: 'border-box'
   }
 });
 
 const BottomBar = () => {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   return (
     <BottomNavigation

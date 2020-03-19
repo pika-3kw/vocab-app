@@ -1,11 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import './App.css';
-
 import BottomBar from '../BottomBar';
 import DictionaryPage from '../DictionaryPage';
-import LearnPage from '../LearnPage';
+import LearnPageContainer from '../LearnPage';
 import TodayPage from '../TodayPage';
 import TopBar from '../TopBar';
 import UserPage from '../UserPage';
@@ -17,7 +15,7 @@ const App = () => {
 
       <Switch>
         <Route exact path='/'>
-          <LearnPage />
+          <LearnPageContainer />
         </Route>
         <Route path='/today'>
           <TodayPage />
