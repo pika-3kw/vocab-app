@@ -40,7 +40,7 @@ const Topbar = () => {
   };
 
   return (
-    <AppBar position='static'>
+    <AppBar position='fixed' className={classes.AppBar}>
       <Toolbar>
         <IconButton
           edge='start'
