@@ -15,7 +15,7 @@ import {
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import MenuDrawer from '../MenuDrawer/index';
+import MenuDrawerContainer from '../MenuDrawer';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,14 +47,14 @@ const Topbar = () => {
           className={classes.menuButton}
           color='inherit'
           aria-label='menu'
-          onClick={() => toggleMenuDrawer()}
+          onClick={toggleMenuDrawer}
         >
           <MenuIcon />
         </IconButton>
 
-        <MenuDrawer
+        <MenuDrawerContainer
           isMenuOpen={isMenuOpen}
-          toggleMenuDrawer={() => toggleMenuDrawer()}
+          toggleMenuDrawer={toggleMenuDrawer}
         />
 
         <Typography variant='h6' className={classes.title}>
