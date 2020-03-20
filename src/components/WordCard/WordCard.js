@@ -24,35 +24,46 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const WordCard = ({ data }) => {
+const WordCard = React.forwardRef(({ data }, ref) => {
   const [isModalOpen, setModalState] = useState(false);
 
   const classes = useStyles();
-  const toogleModalState = () => setModalState(!isModalOpen);
+  const toggleModalState = () => setModalState(!isModalOpen);
 
   return (
     <div className={classes.WordCard}>
-      <Card className={classes.root} onClick={toogleModalState}>
+      <Card className={classes.root} onClick={toggleModalState}>
         <CardActionArea>
           <CardContent>
             <Typography variant='h5'>
-              {data.type === 'en' ? data.word : data.mean}
+              {data.type === 'vi' ? data.mean : data.word}
             </Typography>
             <Typography className={classes.pos} color='textSecondary'>
               {data.wclass}
             </Typography>
+            {data.type === undefined ? (
+              <Typography className={classes.pos} color='textSecondary'>
+                <span>score: </span>
+                {data.score}
+              </Typography>
+            ) : null}
             <Typography variant='h6' color='textSecondary'>
-              {data.type === 'en' ? data.phonetic : <span>&nbsp;</span>}
+              {data.type === 'vi' ? <span>&nbsp;</span> : data.phonetic}
+            </Typography>
+            <Typography variant='h5'>
+              {data.type === undefined ? data.mean : ' '}
             </Typography>
           </CardContent>
         </CardActionArea>
       </Card>
-      <AnswerForm
-        isModalOpen={isModalOpen}
-        toogleModalState={toogleModalState}
-      />
+      {data.type !== undefined ? (
+        <AnswerForm
+          isModalOpen={isModalOpen}
+          toggleModalState={toggleModalState}
+        />
+      ) : null}
     </div>
   );
-};
+});
 
 export default WordCard;
