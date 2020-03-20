@@ -7,7 +7,7 @@ import {
   Modal
 } from '@material-ui/core';
 
-const myStyle = makeStyles(theme => ({
+const myStyles = makeStyles(theme => ({
   form: {
     display: 'flex',
     justifyContent: 'space-around',
@@ -19,19 +19,17 @@ const myStyle = makeStyles(theme => ({
     }
   },
   paper: {
-    position: 'absolute',
     width: 275,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
-    top: '50%',
-    left: '50%'
+    margin: '70px auto'
   }
 }));
 
-const AnswerForm = ({ toogleModalState, isModalOpen }) => {
-  const classes = myStyle();
+const AnswerForm = ({ toggleModalState, isModalOpen }) => {
+  const classes = myStyles();
 
   const [inputValue, setInputValue] = useState('');
 
@@ -49,18 +47,16 @@ const AnswerForm = ({ toogleModalState, isModalOpen }) => {
       aria-labelledby='simple-modal-title'
       aria-describedby='simple-modal-description'
       open={isModalOpen}
-      onClose={toogleModalState}
+      onClose={toggleModalState}
     >
-      <div
-        className={classes.paper}
-        style={{ transform: `translate(-50%, -50%)` }}
-      >
+      <div className={classes.paper}>
         <form className={classes.form} onSubmit={check}>
           <FormControl style={{ margin: '5px' }}>
             <TextField
               label='Answer'
               value={inputValue}
               onChange={updateSubmit}
+              autoFocus
             />
           </FormControl>
           <FormControl style={{ margin: '5px' }}>
