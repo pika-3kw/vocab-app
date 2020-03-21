@@ -31,7 +31,7 @@ const WordCard = React.forwardRef(({ data }, ref) => {
   const toggleModalState = () => setModalState(!isModalOpen);
 
   return (
-    <div className={classes.WordCard}>
+    <>
       <Card className={classes.root} onClick={toggleModalState}>
         <CardActionArea>
           <CardContent>
@@ -62,7 +62,7 @@ const WordCard = React.forwardRef(({ data }, ref) => {
           toggleModalState={toggleModalState}
         />
       ) : null}
-    </div>
+    </>
   );
 });
 
