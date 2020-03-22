@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 
 import WordDetail from './WordDetail';
+import DictionaryActions from './DictionaryActions';
 
 const useStyles = makeStyles({
   root: {
@@ -117,6 +118,7 @@ const DictionaryPage = data => {
             <TableBody>{createTableRows()}</TableBody>
           </Table>
         </TableContainer>
+        <DictionaryActions hidden={cardData} />
       </Paper>
       {cardData ? createModal(cardData) : null}
     </>
