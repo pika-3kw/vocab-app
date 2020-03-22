@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { styled } from '@material-ui/core/styles';
@@ -30,6 +30,10 @@ const BottomBar = () => {
   const classes = useStyles();
   const [value, setValue] = useState(0);
 
+  useEffect(() => {
+    setValue(window.location.pathname);
+  }, []);
+
   return (
     <BottomNavigation
       value={value}
@@ -44,6 +48,7 @@ const BottomBar = () => {
         icon={<MenuBookIcon />}
         component={MyLink}
         to='/'
+        value='/'
       />
 
       <BottomNavigationAction
@@ -51,6 +56,7 @@ const BottomBar = () => {
         icon={<TodayIcon />}
         component={MyLink}
         to='/today'
+        value='/today'
       />
 
       <BottomNavigationAction
@@ -58,6 +64,7 @@ const BottomBar = () => {
         icon={<ListIcon />}
         component={MyLink}
         to='/dictionary'
+        value='/dictionary'
       />
 
       <BottomNavigationAction
@@ -65,6 +72,7 @@ const BottomBar = () => {
         icon={<PersonIcon />}
         component={MyLink}
         to='/user'
+        value='/user'
       />
     </BottomNavigation>
   );
