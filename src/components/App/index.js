@@ -7,6 +7,7 @@ import LearnPageContainer from '../LearnPage';
 import TodayPage from '../TodayPage';
 import TopBar from '../TopBar';
 import UserPageContainer from '../UserPage';
+import { SignUp, SignIn } from '../Auth';
 
 const App = () => {
   return (
@@ -23,8 +24,14 @@ const App = () => {
         <Route path='/dictionary'>
           <DictionaryContainer />
         </Route>
-        <Route path='/User'>
+        <Route path='/user'>
           <UserPageContainer />
+        </Route>
+        <Route path='/signup'>
+          <SignUp />
+        </Route>
+        <Route path='/signin'>
+          <SignIn />
         </Route>
       </Switch>
 
