@@ -1,19 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, Button, TextField, Paper } from '@material-ui/core';
 
-import { teal } from '@material-ui/core/colors';
+import { teal, red } from '@material-ui/core/colors';
+
+import firebase from '../../firebase';
 
 const myStyles = makeStyles({
   root: {
     maxWidth: 600,
     padding: 30,
     margin: 'auto',
-    position: 'relative',
-    top: '50%',
-    transform: 'translateY(-50%)',
     '& .MuiTextField-root': {
       width: '100%'
+    }
+  },
+  error: {
+    '& .MuiFormHelperText-root': {
+      color: red[500]
+    },
+    '& .MuiInput-underline:before': {
+      borderBottomColor: red[500]
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: red[500]
+    },
+    '& .MuiInputLabel-root': {
+      color: red[500]
     }
   },
   formAction: {
@@ -27,7 +40,6 @@ const myStyles = makeStyles({
     }
   },
   link: {
-    color: '#FFF',
     fontSize: '1rem',
     textDecoration: 'none',
     color: teal[300],
@@ -40,25 +52,99 @@ const myStyles = makeStyles({
 
 const SignUp = () => {
   const classes = myStyles();
+
+  const [formInput, setFormInput] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const [errorInput, setErrorInput] = useState({
+    firstName: ' ',
+    lastName: ' ',
+    email: ' ',
+    password: ' ',
+    confirmPassword: ' '
+  });
+
+  const handleChange = event => {
+    setFormInput({ ...formInput, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(formInput.email, formInput.password)
+      .then(createdUser => {
+        console.log(createdUser);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
     <Paper className={classes.root}>
-      <form>
-        <TextField label='First Name' type='text' name='first-name' />
+      <form onSubmit={handleSubmit}>
+        <TextField
+          label='First Name'
+          value={formInput.firstName}
+          type='text'
+          name='firstName'
+          onChange={handleChange}
+          helperText={errorInput.firstName}
+          className={errorInput.firstName !== ' ' ? classes.error : ''}
+        />
 
-        <TextField label='Last Name' type='text' name='first-name' />
+        <TextField
+          label='Last Name'
+          value={formInput.lastName}
+          type='text'
+          name='lastName'
+          onChange={handleChange}
+          helperText={errorInput.lastName}
+          className={errorInput.lastName !== ' ' ? classes.error : ''}
+        />
 
-        <TextField label='Email' type='email' name='email' />
+        <TextField
+          label='Email'
+          value={formInput.email}
+          type='email'
+          name='email'
+          onChange={handleChange}
+          helperText={errorInput.email}
+          className={errorInput.email !== ' ' ? classes.error : ''}
+        />
 
-        <TextField label='Password' type='password' name='password' />
+        <TextField
+          label='Password'
+          value={formInput.password}
+          type='password'
+          name='password'
+          onChange={handleChange}
+          helperText={errorInput.password}
+          className={errorInput.password !== ' ' ? classes.error : ''}
+        />
 
         <TextField
           label='Confirm Password'
           type='password'
-          name='confirm-password'
+          name='confirmPassword'
+          value={formInput.confirmPassword}
+          onChange={handleChange}
+          helperText={errorInput.confirmPassword}
+          className={errorInput.confirmPassword !== ' ' ? classes.error : ''}
         />
 
         <div className={classes.formAction}>
-          <Button variant='contained' className={classes.submitButton}>
+          <Button
+            type='submit'
+            variant='contained'
+            className={classes.submitButton}
+          >
             Sign Up
           </Button>
 
