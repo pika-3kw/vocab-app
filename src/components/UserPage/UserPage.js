@@ -7,21 +7,23 @@ import {
   CardContent,
   Typography,
   Link,
-  Button
+  Button,
 } from '@material-ui/core';
 
 import { red } from '@material-ui/core/colors';
+
+import firebase from '../../firebase';
 
 const myStyle = makeStyles({
   root: {
     textAlign: 'center',
     '& p button': {
       fontSize: '1rem',
-      color: '#25CCF7'
-    }
+      color: '#25CCF7',
+    },
   },
   avatarCont: {
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   avatar: {
     position: 'relative',
@@ -40,7 +42,7 @@ const myStyle = makeStyles({
       color: '#FFF',
       fontSize: '1rem',
       transform: 'translateX(-50%)',
-      opacity: 0
+      opacity: 0,
     },
 
     '&::before': {
@@ -52,21 +54,28 @@ const myStyle = makeStyles({
       position: 'absolute',
       zIndex: 0,
       opacity: 0,
-      transition: '0.5s'
+      transition: '0.5s',
     },
 
     '&:hover::after': {
-      opacity: 1
+      opacity: 1,
     },
 
     '&:hover::before': {
-      opacity: 0.3
-    }
-  }
+      opacity: 0.3,
+    },
+  },
 });
 
 const UserPage = () => {
   const classes = myStyle();
+
+  const handleSignOutButton = () => {
+    firebase
+      .auth()
+      .signOut()
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div>
@@ -91,6 +100,7 @@ const UserPage = () => {
             <Button
               variant='contained'
               style={{ color: '#FFF', backgroundColor: red[500] }}
+              onClick={handleSignOutButton}
             >
               Sign Out
             </Button>

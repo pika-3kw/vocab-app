@@ -3,17 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { Provider, useSelector } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import { store } from './store';
 import MyTheme from './components/MyTheme';
 import App from './components/App';
 
 const Root = () => {
-  const isDarkTheme = useSelector(state => state.app.isDarkTheme);
+  const isDarkTheme = useSelector((state) => state.app.isDarkTheme);
 
   return (
     <MyTheme isDarkTheme={isDarkTheme}>
-      <App />
+      <Router>
+        <App />
+      </Router>
     </MyTheme>
   );
 };
