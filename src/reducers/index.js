@@ -17,8 +17,18 @@ const app_reducer = (state = initApp, action) => {
   }
 };
 
+const user_reducer = (state = null, action) => {
+  switch (action.type) {
+    case actionTypes.SET_USER:
+      return action.info;
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
-  app: app_reducer
+  app: app_reducer,
+  currentUser: user_reducer
 });
 
 export default rootReducer;

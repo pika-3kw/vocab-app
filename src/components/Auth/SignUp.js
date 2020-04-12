@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles, Button, TextField, Paper } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 
-import { teal, red } from '@material-ui/core/colors';
+import { makeStyles, Button, TextField, Paper } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+
+import { teal } from '@material-ui/core/colors';
 
 import firebase from '../../firebase';
 
@@ -12,32 +15,22 @@ const myStyles = makeStyles({
     padding: 30,
     margin: 'auto',
     '& .MuiTextField-root': {
-      width: '100%'
-    }
+      width: '100%',
+    },
   },
-  error: {
-    '& .MuiFormHelperText-root': {
-      color: red[500]
-    },
-    '& .MuiInput-underline:before': {
-      borderBottomColor: red[500]
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: red[500]
-    },
-    '& .MuiInputLabel-root': {
-      color: red[500]
-    }
-  },
+  form: { margin: '10px auto' },
   formAction: {
-    margin: '20px 0'
+    margin: '20px 0',
+  },
+  textField: {
+    marginBottom: 20,
   },
   submitButton: {
     backgroundColor: teal[500],
     color: '#FFF',
     '&:hover': {
-      backgroundColor: teal[400]
-    }
+      backgroundColor: teal[400],
+    },
   },
   link: {
     fontSize: '1rem',
@@ -45,68 +38,81 @@ const myStyles = makeStyles({
     color: teal[300],
     '&:hover': {
       color: teal[500],
-      textDecoration: 'underline'
-    }
-  }
+      textDecoration: 'underline',
+    },
+  },
 });
 
 const SignUp = () => {
   const classes = myStyles();
 
   const [formInput, setFormInput] = useState({
-    firstName: '',
-    lastName: '',
+    fullName: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
 
-  const [errorInput, setErrorInput] = useState({
-    firstName: ' ',
-    lastName: ' ',
-    email: ' ',
-    password: ' ',
-    confirmPassword: ' '
-  });
+  const [errorMessages, setErrorMessages] = useState([]);
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setFormInput({ ...formInput, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
+    let errors = [];
+
+    if (formInput.password !== formInput.confirmPassword) {
+      errors.push('Vui lòng xác nhận lại mật khẩu.');
+    }
+
     firebase
       .auth()
       .createUserWithEmailAndPassword(formInput.email, formInput.password)
-      .then(createdUser => {
-        console.log(createdUser);
+      .then((createdUser) => {
+        createdUser.user.updateProfile({
+          displayName: formInput.fullName,
+          photoURL: 'https://via.placeholder.com/200',
+        });
       })
-      .catch(err => {
-        console.log(err);
+      .catch((err) => {
+        console.log('err', err);
+        errors.push(err.message);
+        setErrorMessages(errors);
       });
   };
 
+  // const fb = useCallback(() => {
+  //   return firebase
+  //     .auth()
+  //     .createUserWithEmailAndPassword(formInput.email, formInput.password);
+  // .updateProfile({
+  //   displayName: formInput.fullName,
+  //   photoURL: 'https://via.placeholder.com/200'
+  // })
+  // .catch(err => {
+  //   console.log('err', err);
+  //   setErrorMessages([...errorMessages, err.message]);
+  // });
+  // });
+
   return (
     <Paper className={classes.root}>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label='First Name'
-          value={formInput.firstName}
-          type='text'
-          name='firstName'
-          onChange={handleChange}
-          helperText={errorInput.firstName}
-          className={errorInput.firstName !== ' ' ? classes.error : ''}
-        />
+      {errorMessages.map((error) => (
+        <Alert style={{ marginTop: '5px' }} severity='error'>
+          {error}
+        </Alert>
+      ))}
 
+      <form onSubmit={handleSubmit} className={classes.form}>
         <TextField
-          label='Last Name'
-          value={formInput.lastName}
+          label='Full Name'
+          value={formInput.fullName}
           type='text'
-          name='lastName'
+          name='fullName'
           onChange={handleChange}
-          helperText={errorInput.lastName}
-          className={errorInput.lastName !== ' ' ? classes.error : ''}
+          style={{ marginBottom: '10px' }}
         />
 
         <TextField
@@ -115,8 +121,7 @@ const SignUp = () => {
           type='email'
           name='email'
           onChange={handleChange}
-          helperText={errorInput.email}
-          className={errorInput.email !== ' ' ? classes.error : ''}
+          style={{ marginBottom: '10px' }}
         />
 
         <TextField
@@ -125,8 +130,7 @@ const SignUp = () => {
           type='password'
           name='password'
           onChange={handleChange}
-          helperText={errorInput.password}
-          className={errorInput.password !== ' ' ? classes.error : ''}
+          style={{ marginBottom: '10px' }}
         />
 
         <TextField
@@ -135,8 +139,7 @@ const SignUp = () => {
           name='confirmPassword'
           value={formInput.confirmPassword}
           onChange={handleChange}
-          helperText={errorInput.confirmPassword}
-          className={errorInput.confirmPassword !== ' ' ? classes.error : ''}
+          style={{ marginBottom: '10px' }}
         />
 
         <div className={classes.formAction}>
