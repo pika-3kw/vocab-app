@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useSelector } from 'react-redux';
+
 import {
   makeStyles,
   Avatar,
@@ -70,6 +72,8 @@ const myStyle = makeStyles({
 const UserPage = () => {
   const classes = myStyle();
 
+  const currentUser = useSelector((state) => state.currentUser);
+
   const handleSignOutButton = () => {
     firebase
       .auth()
@@ -81,11 +85,11 @@ const UserPage = () => {
     <div>
       <Card className={classes.root}>
         <CardContent className={classes.avatarCont}>
-          <Avatar src='/broken-image.jpg' className={classes.avatar} />
+          <Avatar src={currentUser.photoURL} className={classes.avatar} />
         </CardContent>
         <CardContent>
-          <Typography variant='h6'>Phạm Giang Nam</Typography>
-          <Typography>E-mail: nam@vocabapp.com</Typography>
+          <Typography variant='h6'>{currentUser.displayName}</Typography>
+          <Typography>E-mail: {currentUser.email}</Typography>
         </CardContent>
         <CardContent>
           <Typography>

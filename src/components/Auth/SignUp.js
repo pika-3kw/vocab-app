@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import { makeStyles, Button, TextField, Paper } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
@@ -53,6 +52,8 @@ const SignUp = () => {
     confirmPassword: '',
   });
 
+  const userRef = firebase.database().ref('users');
+
   const [errorMessages, setErrorMessages] = useState([]);
 
   const handleChange = (event) => {
@@ -71,11 +72,17 @@ const SignUp = () => {
       .auth()
       .createUserWithEmailAndPassword(formInput.email, formInput.password)
       .then((createdUser) => {
-        createdUser.user.updateProfile({
-          displayName: formInput.fullName,
-          photoURL: 'https://via.placeholder.com/200',
-        });
+        createdUser.user
+          .updateProfile({
+            displayName: formInput.fullName,
+            photoURL: 'https://via.placeholder.com/200',
+          })
+          .then(() => {
+            saveUser(createdUser).then(() => console.log('user saved'));
+          })
+          .catch((err) => console.log(err));
       })
+
       .catch((err) => {
         console.log('err', err);
         errors.push(err.message);
@@ -83,19 +90,12 @@ const SignUp = () => {
       });
   };
 
-  // const fb = useCallback(() => {
-  //   return firebase
-  //     .auth()
-  //     .createUserWithEmailAndPassword(formInput.email, formInput.password);
-  // .updateProfile({
-  //   displayName: formInput.fullName,
-  //   photoURL: 'https://via.placeholder.com/200'
-  // })
-  // .catch(err => {
-  //   console.log('err', err);
-  //   setErrorMessages([...errorMessages, err.message]);
-  // });
-  // });
+  const saveUser = (createdUser) => {
+    return userRef.child(createdUser.user.uid).set({
+      fullName: createdUser.user.displayName,
+      avatar: createdUser.user.photoURL,
+    });
+  };
 
   return (
     <Paper className={classes.root}>
