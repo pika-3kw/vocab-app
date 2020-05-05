@@ -8,25 +8,26 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from '@material-ui/core';
 
 import WordDetail from './WordDetail';
 import DictionaryActions from './DictionaryActions';
+import AddWordForm from './AddWordForm';
 
 const useStyles = makeStyles({
   root: {
     width: '100%',
-    maxHeight: '100%'
+    maxHeight: '100%',
   },
   container: {
-    maxHeight: 'calc(100vh - 135px)'
-  }
+    maxHeight: 'calc(100vh - 135px)',
+  },
 });
 
 const columns = [
   { id: 'word', label: 'Word' },
-  { id: 'mean', label: 'Mean' }
+  { id: 'mean', label: 'Mean' },
 ];
 
 const rows = [
@@ -36,7 +37,7 @@ const rows = [
     word: 'forbidden',
     mean: 'bị cấm',
     wclass: 'adjective',
-    phonetic: '/fərˈbɪdn//'
+    phonetic: '/fərˈbɪdn//',
   },
   {
     score: 100,
@@ -44,7 +45,7 @@ const rows = [
     word: 'test',
     mean: 'kiểm tra',
     wclass: 'noun',
-    phonetic: '/test/'
+    phonetic: '/test/',
   },
   {
     score: 100,
@@ -52,7 +53,7 @@ const rows = [
     word: 'congratulatory',
     mean: 'chúc mừng',
     wclass: 'adjective',
-    phonetic: '/kənˌɡrætʃəˈleɪtəri/'
+    phonetic: '/kənˌɡrætʃəˈleɪtəri/',
   },
   {
     score: 100,
@@ -60,28 +61,38 @@ const rows = [
     word: 'flat',
     mean: 'bằng phẳng',
     wclass: 'noun',
-    phonetic: '/flæt/'
-  }
+    phonetic: '/flæt/',
+  },
 ];
 
-const DictionaryPage = data => {
+const DictionaryPage = (data) => {
   const classes = useStyles();
 
   const [cardData, setCardData] = useState(null);
 
-  const openModal = data => {
+  const [formState, setFormState] = useState(false);
+
+  const clickAddButton = () => {
+    setFormState(!formState);
+  };
+
+  const handleCancel = () => {
+    setFormState(false);
+  };
+
+  const openModal = (data) => {
     setCardData(data);
   };
   const closeModal = () => {
     setCardData(null);
   };
 
-  const createModal = data => (
+  const createModal = (data) => (
     <WordDetail closeModal={closeModal} data={data} />
   );
 
   const createTableHeader = () =>
-    columns.map(column => (
+    columns.map((column) => (
       <TableCell key={column.id} style={{ minWidth: column.minWidth }}>
         {column.label}
       </TableCell>
@@ -96,7 +107,7 @@ const DictionaryPage = data => {
         key={i}
         onClick={() => openModal(row)}
       >
-        {columns.map(column => {
+        {columns.map((column) => {
           const value = row[column.id];
           return (
             <TableCell key={column.id} align={column.align}>
@@ -118,9 +129,10 @@ const DictionaryPage = data => {
             <TableBody>{createTableRows()}</TableBody>
           </Table>
         </TableContainer>
-        <DictionaryActions hidden={cardData} />
+        <DictionaryActions hidden={cardData} clickAddButton={clickAddButton} />
       </Paper>
       {cardData ? createModal(cardData) : null}
+      {formState ? <AddWordForm handleCancel={handleCancel} /> : null}
     </>
   );
 };
