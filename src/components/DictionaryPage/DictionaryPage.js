@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   makeStyles,
@@ -15,6 +15,9 @@ import WordDetail from './WordDetail';
 import DictionaryActions from './DictionaryActions';
 import AddWordForm from './AddWordForm';
 
+import firebase from '../../firebase';
+const wordsRef = firebase.database().ref('words');
+
 const useStyles = makeStyles({
   root: {
     width: '100%',
@@ -30,47 +33,21 @@ const columns = [
   { id: 'mean', label: 'Mean' },
 ];
 
-const rows = [
-  {
-    score: 100,
-    id: Math.random(),
-    word: 'forbidden',
-    mean: 'bị cấm',
-    wclass: 'adjective',
-    phonetic: '/fərˈbɪdn//',
-  },
-  {
-    score: 100,
-    id: Math.random(),
-    word: 'test',
-    mean: 'kiểm tra',
-    wclass: 'noun',
-    phonetic: '/test/',
-  },
-  {
-    score: 100,
-    id: Math.random(),
-    word: 'congratulatory',
-    mean: 'chúc mừng',
-    wclass: 'adjective',
-    phonetic: '/kənˌɡrætʃəˈleɪtəri/',
-  },
-  {
-    score: 100,
-    id: Math.random(),
-    word: 'flat',
-    mean: 'bằng phẳng',
-    wclass: 'noun',
-    phonetic: '/flæt/',
-  },
-];
-
 const DictionaryPage = (data) => {
   const classes = useStyles();
 
   const [cardData, setCardData] = useState(null);
 
   const [formState, setFormState] = useState(false);
+
+  const [dictionary, setDictionary] = useState([]);
+
+  useEffect(() => {
+    wordsRef.once('value', (snap) => {
+      if (!snap) return;
+      setDictionary(Object.values(snap.val()));
+    });
+  }, []);
 
   const clickAddButton = () => {
     setFormState(!formState);
@@ -99,7 +76,7 @@ const DictionaryPage = (data) => {
     ));
 
   const createTableRows = () =>
-    rows.map((row, i) => (
+    dictionary.map((row, i) => (
       <TableRow
         hover
         role='checkbox'
@@ -132,7 +109,13 @@ const DictionaryPage = (data) => {
         <DictionaryActions hidden={cardData} clickAddButton={clickAddButton} />
       </Paper>
       {cardData ? createModal(cardData) : null}
-      {formState ? <AddWordForm handleCancel={handleCancel} /> : null}
+      {formState ? (
+        <AddWordForm
+          handleCancel={handleCancel}
+          setDictionary={setDictionary}
+          dictionary={dictionary}
+        />
+      ) : null}
     </>
   );
 };
