@@ -5,23 +5,23 @@ import {
   CardContent,
   Typography,
   makeStyles,
-  CardActionArea
+  CardActionArea,
 } from '@material-ui/core';
 
 import AnswerForm from './AnswerForm';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: 275,
     margin: '10px auto',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   title: {
-    fontSize: 14
+    fontSize: 14,
   },
   pos: {
-    marginBottom: 12
-  }
+    marginBottom: 12,
+  },
 }));
 
 const WordCard = React.forwardRef(({ data }, ref) => {

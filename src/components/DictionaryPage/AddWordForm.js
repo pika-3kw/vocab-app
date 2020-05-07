@@ -57,14 +57,14 @@ const myStyles = makeStyles({
   },
 });
 
-const AddWordForm = ({ handleCancel }) => {
+const AddWordForm = ({ handleCancel, setDictionary, dictionary }) => {
   const classes = myStyles();
 
   const initForm = {
     word: '',
     mean: '',
     phonetic: '',
-    wordClass: '',
+    wclass: '',
   };
 
   const [formInput, setFormInput] = useState(initForm);
@@ -99,6 +99,7 @@ const AddWordForm = ({ handleCancel }) => {
       .update(newWord)
       .then(() => {
         setFormInput(initForm);
+        setDictionary([...dictionary, newWord]);
       })
       .catch((error) => console.log(error));
   };
@@ -160,8 +161,8 @@ const AddWordForm = ({ handleCancel }) => {
         <TextField
           label='Word Class'
           type='text'
-          name='wordClass'
-          value={formInput.wordClass}
+          name='wclass'
+          value={formInput.wclass}
           onChange={handleChange}
           style={{ marginBottom: '10px' }}
         />
