@@ -17,9 +17,12 @@ import { SignUp, SignIn } from '../Auth';
 
 import firebase from '../../firebase';
 
+const wordsRef = firebase.database().ref('words');
+
 const App = () => {
   const dispatch = useDispatch();
   const setUser = (info) => dispatch({ type: 'SET_USER', info });
+  const setDictionary = (data) => dispatch({ type: 'SET_DICTIONARY', data });
 
   const currentUser = useSelector((state) => state.currentUser);
 
@@ -27,7 +30,12 @@ const App = () => {
     firebase.auth().onAuthStateChanged((user) => {
       setUser(user);
     });
-  });
+
+    wordsRef.once('value', (snap) => {
+      // if (!snap) return;
+      setDictionary(Object.values(snap.val()));
+    });
+  }, []);
 
   return (
     <Router>

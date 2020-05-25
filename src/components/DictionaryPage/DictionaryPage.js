@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   makeStyles,
@@ -14,9 +16,6 @@ import {
 import WordDetail from './WordDetail';
 import DictionaryActions from './DictionaryActions';
 import AddWordForm from './AddWordForm';
-
-import firebase from '../../firebase';
-const wordsRef = firebase.database().ref('words');
 
 const useStyles = makeStyles({
   root: {
@@ -36,18 +35,15 @@ const columns = [
 const DictionaryPage = (data) => {
   const classes = useStyles();
 
+  const dispatch = useDispatch();
+
   const [cardData, setCardData] = useState(null);
 
   const [formState, setFormState] = useState(false);
 
-  const [dictionary, setDictionary] = useState([]);
+  const setDictionary = (data) => dispatch({ type: 'SET_DICTIONARY', data });
 
-  useEffect(() => {
-    wordsRef.once('value', (snap) => {
-      if (!snap) return;
-      setDictionary(Object.values(snap.val()));
-    });
-  }, []);
+  const dictionary = useSelector((state) => state.dictionary);
 
   const clickAddButton = () => {
     setFormState(!formState);

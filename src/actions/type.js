@@ -9,3 +9,9 @@ export const TOGGLE_THEME = 'TOGGLE_THEME';
  */
 
 export const SET_USER = 'SET_USER';
+
+/**
+ * Dictionary ACtion Types
+ */
+
+export const SET_DICTIONARY = 'SET_DICTIONARY';
